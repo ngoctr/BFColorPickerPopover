@@ -128,6 +128,7 @@
 	
 	self.contentViewController = [[BFColorPickerViewController alloc] init];
 	[super showRelativeToRect:positioningRect ofView:positioningView preferredEdge:preferredEdge];
+	self.contentSize = self.contentViewController.view.frame.size;
 	
 	self.colorPanel.color = _color;
 	self.observingColor = YES;
