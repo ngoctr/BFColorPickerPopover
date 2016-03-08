@@ -113,9 +113,21 @@
 		[self deactivate];
 		[self activateWithPopover];
 	} else {
-		[super mouseDown:theEvent];
-	}
-	
+    if (!self.isActive) {
+      BFColorPickerPopover *popover = [BFColorPickerPopover sharedPopover];
+      if (popover.isShown) {
+        BOOL animatesBackup = popover.animates;
+        popover.animates = NO;
+        [popover close];
+        popover.animates = animatesBackup;
+      }
+      [BFColorPickerPopover sharedPopover].target = nil;
+      [BFColorPickerPopover sharedPopover].action = NULL;
+      [self activate:true];
+    } else {
+      [self deactivate];
+    }
+  }
 }
 
 - (void)popoverDidClose:(NSNotification *)notification

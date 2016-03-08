@@ -34,6 +34,6 @@
 
 + (void)deactivateAll;
 + (NSColorWell *)hiddenWell;
-- (void)_performActivationClickWithShiftDown:(BOOL)shift;
+//- (void)_performActivationClickWithShiftDown:(BOOL)shift;
 
 @end

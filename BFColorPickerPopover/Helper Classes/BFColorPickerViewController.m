@@ -89,11 +89,11 @@
 	self.colorPanelView.frame = CGRectMake(0.0f, 0.0f, view.bounds.size.width, view.bounds.size.height - tabbarHeight);
 	self.colorPanelView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
 	[view addSubview:self.colorPanelView];
-	
+
 	// Find and remove the color swatch resize dimple, because it crashes if used outside of a panel.
 	NSArray *panelSubviews = [NSArray arrayWithArray:self.colorPanelView.subviews];
 	for (NSView *subview in panelSubviews) {
-		if ([subview isKindOfClass:NSClassFromString(@"NSColorPanelResizeDimple")]) {
+    if ([subview isKindOfClass:NSClassFromString([NSString stringWithFormat:@"%@%@", @"NSColorPanel", @"ResizeDimple"])]) {
 			[subview removeFromSuperview];
 		}
 	}

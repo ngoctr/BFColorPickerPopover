@@ -49,21 +49,4 @@ static NSColorWell *hiddenWell = nil;
 	return hiddenWell;
 }
 
-- (void)_performActivationClickWithShiftDown:(BOOL)shift {
-	if (!self.isActive) {
-		BFColorPickerPopover *popover = [BFColorPickerPopover sharedPopover];
-		if (popover.isShown) {
-			BOOL animatesBackup = popover.animates;
-			popover.animates = NO;
-			[popover close];
-			popover.animates = animatesBackup;
-		}
-		[BFColorPickerPopover sharedPopover].target = nil;
-		[BFColorPickerPopover sharedPopover].action = NULL;
-		[self activate:!shift];
-	} else {
-		[self deactivate];
-	}
-}
-
 @end
