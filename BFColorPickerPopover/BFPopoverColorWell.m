@@ -113,19 +113,21 @@
 		[self deactivate];
 		[self activateWithPopover];
 	} else {
-    if (!self.isActive) {
-      BFColorPickerPopover *popover = [BFColorPickerPopover sharedPopover];
-      if (popover.isShown) {
-        BOOL animatesBackup = popover.animates;
-        popover.animates = NO;
-        [popover close];
-        popover.animates = animatesBackup;
+    if (self.enabled) {
+      if (!self.isActive) {
+        BFColorPickerPopover *popover = [BFColorPickerPopover sharedPopover];
+        if (popover.isShown) {
+          BOOL animatesBackup = popover.animates;
+          popover.animates = NO;
+          [popover close];
+          popover.animates = animatesBackup;
+        }
+        [BFColorPickerPopover sharedPopover].target = nil;
+        [BFColorPickerPopover sharedPopover].action = NULL;
+        [self activate:true];
+      } else {
+        [self.popover close];
       }
-      [BFColorPickerPopover sharedPopover].target = nil;
-      [BFColorPickerPopover sharedPopover].action = NULL;
-      [self activate:true];
-    } else {
-      [self deactivate];
     }
   }
 }
