@@ -130,7 +130,7 @@
 	[super showRelativeToRect:positioningRect ofView:positioningView preferredEdge:preferredEdge];
 	self.contentSize = self.contentViewController.view.frame.size;
 	
-	self.colorPanel.color = _color;
+//	self.colorPanel.color = _color;
 	self.observingColor = YES;
 }
 
@@ -158,15 +158,17 @@
 		self.observingColor = NO;
 	}
 	
-	// For some strange reason I couldn't figure out, the panel changes it's color when closed.
-	// To fix this, I reset the color after it's closed.
-	NSColor *backupColor = self.colorPanel.color;
+  // For some strange reason I couldn't figure out, the panel changes it's color when closed.
+  // To fix this, I reset the color after it's closed.
+//  NSColor *backupColor = self.colorPanel.color;
+
+  if (deactivate) {
+    [self deactivateColorWell];
+  }
+
 	[super close];
-	self.colorPanel.color = backupColor;
-	
-	if (deactivate) {
-		[self deactivateColorWell];
-	}
+//	self.colorPanel.color = backupColor;
+
 }
 
 - (void)close {
