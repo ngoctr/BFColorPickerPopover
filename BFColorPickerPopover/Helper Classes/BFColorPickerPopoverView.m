@@ -38,6 +38,14 @@ static inline CGFloat pow2(CGFloat x) {return x*x;}
 	self.dragging = YES;
 }
 
+- (BOOL)canBecomeKeyView {
+  return YES;
+}
+
+- (BOOL)acceptsFirstResponder {
+  return YES;
+}
+
 - (void)mouseDragged:(NSEvent *)event {
 	if (self.dragging) {
 		// Calculate the new window position.
