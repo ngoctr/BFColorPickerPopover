@@ -57,6 +57,8 @@ static BOOL colorPanelEnabled = YES;
 		}
 		[super orderFront:sender];
 	} else {
+    [super orderFront:sender];
+    [self orderOut:sender];
 		// Don't do anything.
 	}
 }
