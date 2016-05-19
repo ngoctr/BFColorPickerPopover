@@ -191,6 +191,9 @@
 // Notify the target when the color changes.
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (object == self.colorPanel && [keyPath isEqualToString:@"color"] && context == (__bridge void *)self) {
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"HideBorderAndHandlesMomentarily" object:nil];
+
 		_color = self.colorPanel.color;
 		if (self.target && self.action && [self.target respondsToSelector:self.action]) {
       
