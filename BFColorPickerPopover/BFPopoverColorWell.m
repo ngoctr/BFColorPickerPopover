@@ -122,12 +122,17 @@
         }
         [BFColorPickerPopover sharedPopover].target = nil;
         [BFColorPickerPopover sharedPopover].action = NULL;
+        popover.delegate = self;
         [self activate:true];
       } else {
         [self.popover close];
       }
     }
   }
+}
+
+- (void)popoverWillClose:(NSNotification *)notification {
+  [self.popover close];
 }
 
 @end
