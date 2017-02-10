@@ -39,7 +39,6 @@
 @interface BFColorPickerPopover ()
 @property (nonatomic) NSColorPanel *colorPanel;
 @property (nonatomic, weak) NSColorWell *colorWell;
-@property (nonatomic) BOOL observingColor;
 @end
 
 
@@ -130,8 +129,9 @@
 	[super showRelativeToRect:positioningRect ofView:positioningView preferredEdge:preferredEdge];
 	self.contentSize = self.contentViewController.view.frame.size;
 	
+	self.delegate = self;
 //	self.colorPanel.color = _color;
-	self.observingColor = YES;
+//	self.observingColor = YES;
 }
 
 // On pressing Esc, close the popover.
@@ -175,6 +175,12 @@
 	[self closeAndDeactivateColorWell:YES removeTarget:YES removeObserver:YES];
 }
 
+- (void)popoverWillClose:(NSNotification *)notification {
+		[self removeTargetAndAction];
+		self.observingColor = NO;
+		[self deactivateColorWell];
+}
+
 - (BOOL)_delegatePopoverShouldClose:(id)sender {
 	if ([super _delegatePopoverShouldClose:sender]) {
 		[self removeTargetAndAction];
@@ -192,7 +198,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (object == self.colorPanel && [keyPath isEqualToString:@"color"] && context == (__bridge void *)self) {
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"HideBorderAndHandlesMomentarily" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SelectionBorderViewHideBorderAndHandlesMomentarily" object:nil];
 
 		_color = self.colorPanel.color;
 		if (self.target && self.action && [self.target respondsToSelector:self.action]) {

@@ -82,6 +82,9 @@
 	[[NSColorPanel sharedColorPanel] disablePanel];
 	[super activate:YES];
 	[[NSColorPanel sharedColorPanel] enablePanel];
+
+	// Delay start observing color to avoid KVO notification being sent when opening popover
+	self.popover.observingColor = YES;
 	
 	self.isActive = YES;
 }
