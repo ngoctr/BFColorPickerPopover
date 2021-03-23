@@ -34,7 +34,7 @@
 
 - (CGColorRef)copyCGColor
 {
-	NSColor *colorRGB = [self colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+  NSColor *colorRGB = [self colorUsingColorSpace:NSColorSpace.genericRGBColorSpace];
 	CGFloat components[4];
 	[colorRGB getRed:&components[0] green:&components[1] blue:&components[2] alpha:&components[3]];
 	CGColorSpaceRef theColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);

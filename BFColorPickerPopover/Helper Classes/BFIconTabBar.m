@@ -106,8 +106,8 @@
 		if ([_selectedIndexes count] < 1) {
 			[_selectedIndexes addIndex:0];
 		}
-		
-		[self setNeedsDisplay];
+    
+    self.needsDisplay = YES;
 	}
 }
 
@@ -143,7 +143,7 @@
 			NSUInteger firstIndex = [_selectedIndexes firstIndex];
 			[_selectedIndexes removeAllIndexes];
 			[_selectedIndexes addIndex:firstIndex];
-			[self setNeedsDisplay];
+            [self setNeedsDisplay:YES];
 		}
 	}
 }
@@ -161,7 +161,7 @@
 	} else {
 		[_selectedIndexes addIndex:[indexes firstIndex]];
 	}
-	[self setNeedsDisplay];
+    [self setNeedsDisplay:YES];
 }
 
 - (void)selectIndex:(NSUInteger)index {
@@ -177,7 +177,7 @@
 
 - (IBAction)selectAll {
 	[_selectedIndexes addIndexesInRange:(NSRange){0, [_items count] - 1}];
-	[self setNeedsDisplay];
+    [self setNeedsDisplay:YES];
 }
 
 - (void)deselectIndexes:(NSIndexSet *)indexes {
@@ -186,7 +186,7 @@
 		return;
 	}
 	[_selectedIndexes removeIndexes:indexes];
-	[self setNeedsDisplay];
+    [self setNeedsDisplay:YES];
 }
 
 - (void)deselectIndex:(NSUInteger)index {
@@ -202,7 +202,7 @@
 
 - (IBAction)deselectAll {
 	[_selectedIndexes removeAllIndexes];
-	[self setNeedsDisplay];
+    [self setNeedsDisplay:YES];
 }
 
 #pragma mark -
@@ -210,50 +210,8 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-	
-	//// Color Declarations
-	NSColor* selectionGradientTop = [NSColor colorWithDeviceWhite:0.99 alpha:1.0];
-	NSColor* selectionGradientBottom = [NSColor colorWithDeviceWhite:0.99 alpha:1.0];
-	NSColor* lineColor = [NSColor colorWithDeviceWhite:0.7 alpha:1.0];
-	
-//	if (![[self window] isKeyWindow])
-//	{
-//		selectionGradientTop = [NSColor colorWithCalibratedRed:0.961 green:0.961 blue:0.961 alpha:1.000];
-//		selectionGradientBottom = [NSColor colorWithCalibratedRed:0.855 green:0.855 blue:0.855 alpha:1.000];
-//		lineColor = [NSColor colorWithCalibratedRed:0.537 green:0.537 blue:0.537 alpha:1.000];
-//	}
-	
-	//// Prepare selection border gradients.
-	
-	//// Color Declarations
-	NSColor* gradientOutsideTop = [NSColor colorWithDeviceWhite:0.9 alpha:1.0];
-	NSColor* gradientOutsideMiddle = [NSColor colorWithDeviceWhite:0.6 alpha:1.0];
-	NSColor* gradientOutsideBottom = [NSColor colorWithDeviceWhite:0.8 alpha:1.0];
-	NSColor* gradientInsideTop = selectionGradientTop;
-	NSColor* gradientInsideMiddle = [NSColor colorWithDeviceWhite:0.7 alpha:1.0];
-	NSColor* gradientInsideBottom = selectionGradientBottom;
-	NSColor* selectionGradientMiddle = [NSColor colorWithDeviceWhite:0.8 alpha:1.0];
-	
-	if (![self.window isKeyWindow]) {
-		gradientOutsideTop = [NSColor colorWithDeviceWhite:0.83 alpha:1.0];
-		gradientOutsideMiddle = [NSColor colorWithDeviceWhite:0.43 alpha:1.0];
-		gradientOutsideBottom = [NSColor colorWithDeviceWhite:0.71 alpha:1.0];
-		gradientInsideMiddle = [NSColor colorWithDeviceWhite:0.71 alpha:1.0];
-		selectionGradientMiddle = [NSColor colorWithDeviceWhite:0.79 alpha:1.0];
-	}
-	
-	NSGradient* selectionGradient = [[NSGradient alloc] initWithColorsAndLocations: 
-									 selectionGradientTop, 0.0, 
-									 selectionGradientMiddle, 0.50, 
-									 selectionGradientBottom, 1.0, nil];
-	NSGradient* gradientOutside = [[NSGradient alloc] initWithColorsAndLocations: 
-								   gradientOutsideTop, 0.0, 
-								   gradientOutsideMiddle, 0.50, 
-								   gradientOutsideBottom, 1.0, nil];
-	NSGradient* gradientInside = [[NSGradient alloc] initWithColorsAndLocations: 
-								  gradientInsideTop, 0.0, 
-								  gradientInsideMiddle, 0.50, 
-								  gradientInsideBottom, 1.0, nil];
+    NSColor* backgroundColor = [self.window isKeyWindow] ?
+        NSColor.selectedContentBackgroundColor : NSColor.unemphasizedSelectedContentBackgroundColor;
 	
 	
 	CGFloat startX = [self startX];
@@ -268,28 +226,11 @@
 		[self addToolTipRect:selectionFrame owner:item.tooltip userData:nil];
 		
 		if ([_selectedIndexes containsIndex:i]) {
-			
-			//// Draw selection gradients
-			CGFloat gradientHeight = self.bounds.size.height - 2;
-			NSRect outsideLineFrameLeft = NSMakeRect(floor(currentX + 0.5), 1, 1, gradientHeight);
-			NSRect insideLineFrameLeft = NSMakeRect(floor(currentX + 1.5), 1, 1, gradientHeight);
-			NSRect outsideLineFrameRight = NSMakeRect(floor(currentX + _itemWidth + 0.5), 1, 1, gradientHeight);
-			NSRect insideLineFrameRight = NSMakeRect(floor(currentX + _itemWidth - 0.5), 1, 1, gradientHeight);
-			
-			NSBezierPath* selectionFramePath = [NSBezierPath bezierPathWithRect: selectionFrame];
-			[selectionGradient drawInBezierPath: selectionFramePath angle: -90];
-			
-			NSBezierPath* outsideLinePathLeft = [NSBezierPath bezierPathWithRect: outsideLineFrameLeft];
-			[gradientOutside drawInBezierPath: outsideLinePathLeft angle: -90];
-			
-			NSBezierPath* insideLinePathLeft = [NSBezierPath bezierPathWithRect: insideLineFrameLeft];
-			[gradientInside drawInBezierPath: insideLinePathLeft angle: -90];
-			
-			NSBezierPath* outsideLinePathRight = [NSBezierPath bezierPathWithRect: outsideLineFrameRight];
-			[gradientOutside drawInBezierPath: outsideLinePathRight angle: -90];
-			
-			NSBezierPath* insideLinePathRight = [NSBezierPath bezierPathWithRect: insideLineFrameRight];
-			[gradientInside drawInBezierPath: insideLinePathRight angle: -90];
+			//// Draw selection rect
+            [backgroundColor setFill];
+            NSRect selectedRect = NSInsetRect(selectionFrame, 1, 1);
+            NSBezierPath* path = [NSBezierPath bezierPathWithRoundedRect:selectedRect xRadius:3 yRadius:3];
+            [path fill];
 		}
 		
 		// Draw icon
@@ -299,17 +240,17 @@
 		
 		CGRect fromRect = CGRectMake(0.0f, 0.0f, embossedImage.size.width, embossedImage.size.height);
 		CGPoint position = CGPointMake(round(center.x - embossedImage.size.width / 2.0f), round(center.y - embossedImage.size.height / 2.0f));
-		[embossedImage drawAtPoint:position fromRect:fromRect operation:NSCompositeSourceOver fraction:1.0f];
+        [embossedImage drawAtPoint:position fromRect:fromRect operation:NSCompositingOperationSourceOver fraction:1.0f];
 	}
 	
 	
-	
 	//// Line Drawing
+    NSColor* lineColor = NSColor.separatorColor;
 	NSBezierPath* line1 = [NSBezierPath bezierPath];
 	[line1 moveToPoint: NSMakePoint(0.0, 0.5)];
 	[line1 lineToPoint: NSMakePoint(self.bounds.size.width, 0.5)];
 	[lineColor setStroke];
-	[line1 setLineWidth: 1];
+    [line1 setLineWidth: 0.5];
 	[line1 stroke];
 }
 
@@ -341,7 +282,7 @@
 			[self selectItem:_pressedItem];
 		}
 		[self notify];
-		[self setNeedsDisplay];
+        [self setNeedsDisplay:YES];
 	} else {
 		[super mouseDown:theEvent];
 	}
@@ -359,7 +300,7 @@
 				[self selectItem:_pressedItem];
 			}
 			[self notify];
-			[self setNeedsDisplay];
+            [self setNeedsDisplay:YES];
 		}
 	} else {
 		[super mouseDragged:theEvent];
@@ -370,7 +311,7 @@
 	if (_dragging) {
 		_pressedItem = nil;
 		_dragging = NO;
-		[self setNeedsDisplay];
+        [self setNeedsDisplay:YES];
 	} else {
 		[super mouseUp:theEvent];
 	}
@@ -407,7 +348,7 @@
 	if (newIcon != _icon) {
 		_icon = newIcon;
 		
-		[_tabBar setNeedsDisplay];
+        [_tabBar setNeedsDisplay:YES];
 	}
 }
 

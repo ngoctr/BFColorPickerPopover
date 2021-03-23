@@ -93,6 +93,7 @@
 	// Find and remove the color swatch resize dimple, because it crashes if used outside of a panel.
 	NSArray *panelSubviews = [NSArray arrayWithArray:self.colorPanelView.subviews];
 	for (NSView *subview in panelSubviews) {
+        NSLog(@"NSColorPanel Subview's Class: %@", NSStringFromClass(subview.class));
 		if ([subview isKindOfClass:NSClassFromString(@"NSColorPanelResizeDimple")]) {
 			[subview removeFromSuperview];
 		}

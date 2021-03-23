@@ -102,7 +102,7 @@
 	if (!self.isActive) return;
 	[super deactivate];
 	self.popover.colorWell = nil;
-    self.popover.delegate = nil;
+  self.popover.delegate = nil;
 	self.popover = nil;
 	self.isActive = NO;
 }

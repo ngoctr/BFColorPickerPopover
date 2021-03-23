@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
   spec.license = { :type => 'BSD', :file => 'License' }
 
   spec.platform = :osx
-  spec.osx.deployment_target = "10.8"
+  spec.osx.deployment_target = "10.14"
   spec.requires_arc = true
 
   spec.source = {:git => 'https://github.com/DrummerB/BFColorPickerPopover.git', :tag => spec.version.to_s}
